@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Recommendation;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
@@ -70,6 +71,54 @@ class Graph8Service
                 $dealId
             )
         );
+    }
+
+    public function fetchCompanyContacts(
+        string $companyId
+    ): array {
+        $page = 1;
+        $contacts = [];
+
+        while (true) {
+            $response = $this->get(
+                '/companies/'
+                    .rawurlencode($companyId)
+                    .'/contacts',
+                [
+                    'page' => $page,
+                    'limit' => 200,
+                ]
+            );
+
+            $pageContacts = $this->extractList(
+                $response,
+                [
+                    'data',
+                    'contacts',
+                    'items',
+                    'data.contacts',
+                    'data.items',
+                    'data.results',
+                ]
+            );
+
+            if ($pageContacts === []) {
+                break;
+            }
+
+            $contacts = [
+                ...$contacts,
+                ...$pageContacts,
+            ];
+
+            if (! $this->hasNextPage($response)) {
+                break;
+            }
+
+            $page++;
+        }
+
+        return $contacts;
     }
 
     public function executeRecommendation(
@@ -161,7 +210,9 @@ class Graph8Service
 
         if (blank($endpoint)) {
             throw new RuntimeException(
-                "GRAPH8_".strtoupper($name)."_ENDPOINT is missing from the .env file."
+                "GRAPH8_"
+                .strtoupper($name)
+                ."_ENDPOINT is missing from the .env file."
             );
         }
 
@@ -183,6 +234,45 @@ class Graph8Service
         return rtrim($endpoint, '/')
             .'/'
             .rawurlencode($resourceId);
+    }
+
+    private function extractList(
+        array $response,
+        array $candidatePaths
+    ): array {
+        foreach ($candidatePaths as $path) {
+            $value = Arr::get($response, $path);
+
+            if (is_array($value) && array_is_list($value)) {
+                return $value;
+            }
+        }
+
+        if (array_is_list($response)) {
+            return $response;
+        }
+
+        return [];
+    }
+
+    private function hasNextPage(array $response): bool
+    {
+        $candidatePaths = [
+            'pagination.has_next',
+            'data.pagination.has_next',
+            'meta.has_next',
+            'data.meta.has_next',
+        ];
+
+        foreach ($candidatePaths as $path) {
+            $value = Arr::get($response, $path);
+
+            if (is_bool($value)) {
+                return $value;
+            }
+        }
+
+        return false;
     }
 
     private function responseData(

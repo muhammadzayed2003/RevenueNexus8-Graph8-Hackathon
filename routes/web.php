@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BoardroomController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Graph8SyncController;
 use App\Http\Controllers\Graph8WebhookController;
 use App\Http\Controllers\NegotiatorController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::post(
+        '/graph8/sync',
+        [Graph8SyncController::class, 'sync']
+    )->name('graph8.sync');
+
     Route::get('/boardroom8', [BoardroomController::class, 'index'])
         ->name('boardroom.index');
 
