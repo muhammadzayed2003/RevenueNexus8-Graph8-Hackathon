@@ -9,7 +9,7 @@ FROM php:8.4-apache
 WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev libzip-dev libonig-dev libicu-dev \
+    git unzip libpq-dev libzip-dev libonig-dev libicu-dev libsqlite3-dev \
     && docker-php-ext-install pdo_pgsql pdo_sqlite mbstring zip bcmath intl \
     && rm -rf /var/lib/apt/lists/*
 
