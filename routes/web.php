@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BoardroomController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EvidenceChatController;
 use App\Http\Controllers\Graph8SyncController;
 use App\Http\Controllers\Graph8WebhookController;
 use App\Http\Controllers\NegotiatorController;
@@ -29,6 +30,11 @@ Route::middleware('auth')->group(function () {
         '/graph8/sync',
         [Graph8SyncController::class, 'sync']
     )->name('graph8.sync');
+
+    Route::get(
+        '/graph8/sync-now',
+        [Graph8SyncController::class, 'sync']
+    )->name('graph8.sync.now');
 
     Route::get('/boardroom8', [BoardroomController::class, 'index'])
         ->name('boardroom.index');
@@ -76,7 +82,11 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-Route::post('/evidence8/chat', [\App\Http\Controllers\EvidenceChatController::class, 'store'])
+Route::post(
+    '/evidence8/chat',
+    [EvidenceChatController::class, 'store']
+)
     ->middleware('auth')
     ->name('evidence8.chat');
+
+require __DIR__.'/auth.php';
