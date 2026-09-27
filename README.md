@@ -56,7 +56,7 @@ If there are no matching events, it reports that condition. Historical records p
 
 ## Evidence8 RAG chatbot
 
-Evidence8 answers questions about RevenueNexus8 using a **retrieval-augmented generation** knowledge layer. Its six indexed documents cover Platform Overview, Boardroom8, Negotiator8, TimeMachine8, Relay8 approval/graph8 execution, and Evidence8 itself.
+Evidence8 answers questions about RevenueNexus8 using a **retrieval-augmented generation** knowledge layer from Qdrant. Its six indexed documents cover Platform Overview, Boardroom8, Negotiator8, TimeMachine8, Relay8 approval/graph8 execution, and Evidence8 itself.
 
 ```mermaid
 flowchart TD
@@ -160,7 +160,7 @@ The route archive predates Evidence8; inspect the latest checkout for its exact 
 | Layer | Technologies | Role |
 | --- | --- | --- |
 | Backend | **Laravel 13, PHP 8.4** | Routes, authentication, validation, services, tests. |
-| Local database | **SQLite** | Records, events, analysis runs, recommendations, users. |
+| Local database | **SQLite and Qdrant** | Records, events, analysis runs, recommendations, users. |
 | UI | **Blade, Tailwind CSS, Alpine.js** | Module pages, dashboard, interactive widget. |
 | Visual/build | **Three.js, JavaScript, Vite** | Cinematic scene and frontend bundle. |
 | AI analysis | **Gemini** | Structured deal, buyer-side, and negotiation results. |
