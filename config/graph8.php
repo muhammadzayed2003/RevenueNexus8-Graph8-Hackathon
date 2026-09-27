@@ -14,6 +14,21 @@ return [
         'GRAPH8_OWNER_ID'
     ),
 
+    'relay' => [
+        'agent_id' => env(
+            'GRAPH8_RELAY_AGENT_ID'
+        ),
+
+        'agent_name' => env(
+            'GRAPH8_RELAY_AGENT_NAME',
+            'Relay8 Coordinator'
+        ),
+
+        'fallback_contact_id' => env(
+            'GRAPH8_RELAY_CONTACT_ID'
+        ),
+    ],
+
     'auth_header' => env(
         'GRAPH8_AUTH_HEADER',
         'Authorization'

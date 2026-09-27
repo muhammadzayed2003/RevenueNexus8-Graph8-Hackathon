@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recommendation;
 use App\Services\Graph8Service;
+use App\Services\RelayCoordinatorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -118,7 +119,8 @@ class RelayController extends Controller
     public function execute(
         Request $request,
         Recommendation $recommendation,
-        Graph8Service $graph8Service
+        Graph8Service $graph8Service,
+        RelayCoordinatorService $relayCoordinatorService
     ): RedirectResponse {
         $this->authorizeRecommendation(
             $request,
@@ -138,6 +140,13 @@ class RelayController extends Controller
                     $recommendation
                 );
 
+            $response['results']['relay_coordinator'] =
+                $relayCoordinatorService->send(
+                    $recommendation,
+                    $response['target'] ?? [],
+                    $response['metadata'] ?? []
+                );
+
             $recommendation->update([
                 'status' => 'executed',
                 'executed_at' => now(),
@@ -150,7 +159,7 @@ class RelayController extends Controller
                 ->route('relay.index')
                 ->with(
                     'success',
-                    'Approved action created an actual graph8 note and follow-up task.'
+                    'Approved report created a graph8 note and task, then reached Relay8 Coordinator successfully.'
                 );
         } catch (Throwable $exception) {
             report($exception);
@@ -187,6 +196,9 @@ class RelayController extends Controller
         )
             && filled(
                 config('graph8.api_token')
+            )
+            && filled(
+                config('graph8.relay.agent_id')
             );
     }
 }

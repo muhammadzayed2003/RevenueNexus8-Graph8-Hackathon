@@ -1,4 +1,5 @@
-﻿import './agent-voice';
+import './evidence-chat';
+import './agent-voice';
 import Alpine from 'alpinejs';
 import { createNexusScene } from './nexus-scene';
 

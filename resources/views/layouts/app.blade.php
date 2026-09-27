@@ -107,6 +107,7 @@
             </a>
         </footer>
     </div>
+    <x-evidence-chat />
 </body>
 </html>
 

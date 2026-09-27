@@ -77,3 +77,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+Route::post('/evidence8/chat', [\App\Http\Controllers\EvidenceChatController::class, 'store'])
+    ->middleware('auth')
+    ->name('evidence8.chat');
