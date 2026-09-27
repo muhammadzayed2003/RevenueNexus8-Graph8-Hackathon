@@ -127,6 +127,15 @@ class RelayController extends Controller
             $recommendation
         );
 
+        if ($recommendation->status === 'executed') {
+            return redirect()
+                ->route('relay.index')
+                ->with(
+                    'success',
+                    'Recommendation was already executed successfully.'
+                );
+        }
+
         abort_unless(
             $recommendation->status ===
                 'approved',
