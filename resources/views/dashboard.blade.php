@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <section class="rt-hero">
         <div class="rt-hero-copy">
             <div class="rt-pill">
@@ -108,7 +108,7 @@
                             {{ $studio['number'] }}
                         </span>
 
-                        <span>â†—</span>
+                        <span>↗</span>
                     </div>
 
                     <h3>
@@ -130,7 +130,7 @@
                         </span>
 
                         <span>
-                            Open studio â†’
+                            Open studio →
                         </span>
                     </div>
                 </a>
@@ -142,7 +142,7 @@
             href="{{ route('relay.index') }}"
         >
             <div class="rt-relay-mark">
-                â†—
+                ↗
             </div>
 
             <div>
@@ -167,7 +167,7 @@
                 </small>
             </div>
 
-            <span>â†’</span>
+            <span>→</span>
         </a>
     </section>
 
@@ -261,7 +261,7 @@
                     {{ ucfirst($simulation->status) }}
                 </span>
 
-                <span>â†—</span>
+                <span>↗</span>
             </a>
         @empty
             <div class="rt-empty">

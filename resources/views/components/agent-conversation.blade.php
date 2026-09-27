@@ -1,4 +1,4 @@
-﻿@props(['simulation'])
+@props(['simulation'])
 
 @php
     $result = $simulation->result_data ?? [];
@@ -71,7 +71,7 @@
             }
 
             $addTurn(
-                $round['buyer_name'] ?? $buyer.' â€” Buyer',
+                $round['buyer_name'] ?? $buyer.' — Buyer',
                 $round['buyer_move'] ?? '',
                 'Simulated buyer'
             );
@@ -230,7 +230,7 @@
                 x-on:click="selectTurn(index + 1)"
                 x-bind:disabled="index >= turns.length - 1"
             >
-                Next turn â†’
+                Next turn →
             </button>
 
             <label class="rt-conversation-speed">
@@ -241,9 +241,9 @@
                     x-bind:disabled="playing"
                     aria-label="Playback speed"
                 >
-                    <option value="0.85">0.85Ã—</option>
-                    <option value="1">1Ã—</option>
-                    <option value="1.15">1.15Ã—</option>
+                    <option value="0.85">0.85×</option>
+                    <option value="1">1×</option>
+                    <option value="1.15">1.15×</option>
                 </select>
             </label>
         </div>

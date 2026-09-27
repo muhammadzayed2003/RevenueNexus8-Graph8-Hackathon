@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -86,7 +86,7 @@
                     New here?
 
                     <a href="{{ route('register') }}">
-                        Create an account â†—
+                        Create an account ↗
                     </a>
                 </p>
             @endif
@@ -96,7 +96,7 @@
                     Already have an account?
 
                     <a href="{{ route('login') }}">
-                        Sign in â†—
+                        Sign in ↗
                     </a>
                 </p>
             @endif

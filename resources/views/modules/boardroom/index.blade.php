@@ -1,10 +1,10 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ route('dashboard') }}"
                    class="text-sm font-medium text-slate-500 hover:text-violet-600">
-                    â† RevenueNexus8
+                    ← RevenueNexus8
                 </a>
 
                 <h2 class="mt-1 text-xl font-semibold text-slate-900">
@@ -439,7 +439,7 @@
                                 <ul class="mt-4 space-y-3">
                                     @forelse ($objections as $objection)
                                         <li class="flex gap-3 text-sm leading-6 text-slate-400">
-                                            <span class="text-rose-400">â€¢</span>
+                                            <span class="text-rose-400">•</span>
                                             <span>{{ $objection }}</span>
                                         </li>
                                     @empty
@@ -467,7 +467,7 @@
                                     href="{{ route('relay.index') }}"
                                     class="mt-5 inline-flex rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
                                 >
-                                    Review in Relay8 â†’
+                                    Review in Relay8 →
                                 </a>
                             </div>
                         </div>

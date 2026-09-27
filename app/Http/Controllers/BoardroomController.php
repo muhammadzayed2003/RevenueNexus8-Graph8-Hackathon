@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -415,7 +415,7 @@ class BoardroomController extends Controller
         $dealName = trim(
             ($company->name
                 ?? 'graph8 Company')
-            .' â€” '
+            .' — '
             .Str::limit(
                 $validated['solution'],
                 80,

@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'name' => 'Revenue Nexus',
     'role' => 'AI simulation agent',
     'accent' => '#eee9df',

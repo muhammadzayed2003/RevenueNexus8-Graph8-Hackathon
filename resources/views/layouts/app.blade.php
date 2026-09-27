@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -103,7 +103,7 @@
             </span>
 
             <a href="{{ route('relay.index') }}">
-                Open Relay8 â†—
+                Open Relay8 ↗
             </a>
         </footer>
     </div>

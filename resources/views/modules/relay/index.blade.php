@@ -1,10 +1,10 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ route('dashboard') }}"
                    class="text-sm font-medium text-slate-500 hover:text-emerald-600">
-                    â† RevenueNexus8
+                    ← RevenueNexus8
                 </a>
 
                 <h2 class="mt-1 text-xl font-semibold text-slate-900">
@@ -264,7 +264,7 @@
                                         </p>
 
                                         <p class="mt-1 text-xs text-slate-500">
-                                            {{ $recommendation->executed_at?->format('M d, Y â€” h:i A') }}
+                                            {{ $recommendation->executed_at?->format('M d, Y — h:i A') }}
                                         </p>
 
                                         @if (! empty($recommendation->execution_response))

@@ -1,4 +1,4 @@
-﻿<div x-data="revenueIntro">
+<div x-data="revenueIntro">
     <template x-if="visible">
         <section
             class="rt-intro"
@@ -38,7 +38,7 @@
                 class="rt-intro-skip"
                 x-on:click="finish()"
             >
-                Skip intro â†—
+                Skip intro ↗
             </button>
 
             <div class="rt-intro-progress"></div>
