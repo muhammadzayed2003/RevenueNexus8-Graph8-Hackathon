@@ -96,6 +96,46 @@ Relay8 also forwards the **approved decision report from our app to the graph8 R
 
 A direct agent chat call returned 502 in that integration attempt, so the demonstrated working handoff uses the **agent memory endpoint**. Memory receipt establishes that graph8 got the approved report; it does not imply autonomous customer outreach by the agent.
 
+## Latest Deployment and Production Updates
+
+RevenueNexus8 was deployed successfully as a Laravel Docker application on Render using the free compute plan.
+
+### Production Configuration
+
+- Added a production Dockerfile with:
+  - PHP 8.4 and Apache
+  - Node.js Vite asset build stage
+  - Composer dependency installation
+  - PostgreSQL support
+  - SQLite support
+  - Required PHP extensions
+  - Laravel public directory configuration
+  - Render port `10000`
+  - Automatic migrations during container startup
+- Connected the application to Render PostgreSQL.
+- Connected the application to the existing Qdrant Cloud instance.
+- Configured Gemini, Graph8, Qdrant, and production application environment variables.
+- Configured `APP_URL` and `ASSET_URL` for the live HTTPS domain.
+- Set `SESSION_DRIVER=file` for the free deployment environment.
+
+### HTTPS and Routing Fixes
+
+- Configured Laravel to trust Render’s reverse proxy.
+- Forced all generated application URLs to use HTTPS.
+- Fixed insecure HTTP form submissions on:
+  - Login
+  - Logout
+  - Registration
+  - Boardroom8
+  - Negotiator8
+  - TimeMachine8
+  - Relay8
+- Redirected the root URL directly to the login page.
+- Added a temporary authenticated Graph8 synchronization route:
+
+```text
+/graph8/sync-now
+
 ## Architecture
 
 ```mermaid
