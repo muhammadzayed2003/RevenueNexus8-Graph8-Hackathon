@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (app()->environment('production')) {
+            URL::forceRootUrl('https://revenuenexus8.onrender.com');
             URL::forceScheme('https');
         }
     }

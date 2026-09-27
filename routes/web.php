@@ -11,7 +11,7 @@ use App\Http\Controllers\TimeMachineController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::redirect('/', '/login');
 
 Route::post(
     '/webhooks/graph8',
