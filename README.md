@@ -160,7 +160,7 @@ The route archive predates Evidence8; inspect the latest checkout for its exact 
 | Layer | Technologies | Role |
 | --- | --- | --- |
 | Backend | **Laravel 13, PHP 8.4** | Routes, authentication, validation, services, tests. |
-| Local database | **SQLite and Qdrant** | Records, events, analysis runs, recommendations, users. |
+| Database | **SQLite and Qdrant** | Records, events, analysis runs, recommendations, users. |
 | UI | **Blade, Tailwind CSS, Alpine.js** | Module pages, dashboard, interactive widget. |
 | Visual/build | **Three.js, JavaScript, Vite** | Cinematic scene and frontend bundle. |
 | AI analysis | **Gemini** | Structured deal, buyer-side, and negotiation results. |
