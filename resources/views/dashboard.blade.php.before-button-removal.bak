@@ -17,7 +17,13 @@
                 and explore what could happen next.
             </p>
 
-            
+            <a
+                href="#studios"
+                class="rt-button rt-button-light"
+            >
+                Enter your workspace
+                <span>↗</span>
+            </a>
 
             <div class="rt-hero-meta">
                 <span>
@@ -39,7 +45,6 @@
                 name="Revenue Twin"
                 role="Your decision counterpart"
                 size="hero"
-                :show-identity="false"
             />
 
             <span class="rt-art-number">

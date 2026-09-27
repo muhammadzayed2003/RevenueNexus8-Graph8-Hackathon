@@ -1,4 +1,3 @@
-import './twin-voice';
 import Alpine from 'alpinejs';
 import { createTwinScene } from './twin-scene';
 

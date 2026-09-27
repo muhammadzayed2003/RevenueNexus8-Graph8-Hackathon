@@ -1,30 +1,106 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}"
+    >
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <title>{{ config('app.name', 'RevenueTwin8') }}</title>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+    @vite([
+        'resources/css/app.css',
+        'resources/js/app.js',
+    ])
+</head>
+
+<body class="rt-app">
+    <x-cinematic-intro />
+
+    <div class="rt-shell">
+        <header class="rt-topbar">
+            <a
+                class="rt-wordmark"
+                href="{{ route('login') }}"
+            >
+                RevenueTwin<span>8</span><i></i>
+            </a>
+
+            <span class="rt-eyebrow">
+                A new perspective on revenue
+            </span>
+        </header>
+    </div>
+
+    <main class="rt-auth rt-shell">
+        <section class="rt-auth-art">
+            <p class="rt-eyebrow">
+                Your next decision, rehearsed.
+            </p>
+
+            <h1>
+                Meet your<br>
+                <em>other perspective.</em>
+            </h1>
+
+            <x-twin-robot
+                name="Revenue Twin"
+                size="large"
+                :show-identity="false"
+            />
+
+            <p>
+                Simulate the room. Explore the possibilities.<br>
+                Move forward with a considered plan.
+            </p>
+        </section>
+
+        <section class="rt-auth-form">
+            <span class="rt-eyebrow">
+                Your workspace
+            </span>
+
+            <h2>
+                @if(request()->routeIs('register'))
+                    Start thinking ahead.
+                @elseif(request()->routeIs('login'))
+                    Welcome back.
+                @else
+                    Account access
+                @endif
+            </h2>
+
+            <div class="rt-auth-fields">
                 {{ $slot }}
             </div>
-        </div>
-    </body>
+
+            @if(request()->routeIs('login'))
+                <p class="rt-auth-switch">
+                    New here?
+
+                    <a href="{{ route('register') }}">
+                        Create an account ↗
+                    </a>
+                </p>
+            @endif
+
+            @if(request()->routeIs('register'))
+                <p class="rt-auth-switch">
+                    Already have an account?
+
+                    <a href="{{ route('login') }}">
+                        Sign in ↗
+                    </a>
+                </p>
+            @endif
+        </section>
+    </main>
+</body>
 </html>
