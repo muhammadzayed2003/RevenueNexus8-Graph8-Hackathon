@@ -2,7 +2,7 @@
 
 ### The AI deal before the human deal
 
-**RevenueNexus8** is an AI revenue decision workspace built for **graph8 Hackathon Lahore 2026**. It gives a sales team a **second-perspective AI layer** before a real buyer conversation: buyer-side questions, negotiation choices, historical deal signals, product evidence, and a recommended next move. A human approves an action before it is executed through graph8.
+**RevenueNexus8** is an AI revenue decision Layer built for **graph8 Hackathon Lahore 2026**. It gives a sales team a **second-perspective AI layer** before a real buyer conversation: buyer-side questions, negotiation choices, historical deal signals, product evidence, and a recommended next move. A human approves an action before it is executed through graph8.
 
 > Prepare the AI deal first; enter the human deal with a clearer strategy.
 
