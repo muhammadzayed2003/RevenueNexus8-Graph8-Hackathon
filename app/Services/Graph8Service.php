@@ -254,6 +254,15 @@ class Graph8Service
             ]
         );
 
+        // Use the configured graph8 contact when an older recommendation has no CRM IDs.
+        if (blank($dealId)
+            && blank($companyId)
+            && blank($contactId)) {
+            $contactId = config(
+                'graph8.relay.fallback_contact_id'
+            );
+        }
+
         [$entityType, $entityId] = $this->targetEntity(
             $dealId,
             $companyId,
