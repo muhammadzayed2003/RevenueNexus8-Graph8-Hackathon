@@ -1,9 +1,18 @@
 <?php
 
 return [
-    'base_url' => env('GRAPH8_BASE_URL'),
+    'base_url' => env(
+        'GRAPH8_BASE_URL',
+        'https://be.graph8.com/api/v1'
+    ),
 
-    'api_token' => env('GRAPH8_API_TOKEN'),
+    'api_token' => env(
+        'GRAPH8_API_TOKEN'
+    ),
+
+    'owner_id' => env(
+        'GRAPH8_OWNER_ID'
+    ),
 
     'auth_header' => env(
         'GRAPH8_AUTH_HEADER',
@@ -21,19 +30,38 @@ return [
     ),
 
     'webhook' => [
-        'secret' => env('GRAPH8_WEBHOOK_SECRET'),
+        'secret' => env(
+            'GRAPH8_WEBHOOK_SECRET'
+        ),
 
         'signature_header' => env(
             'GRAPH8_WEBHOOK_SIGNATURE_HEADER',
-            'X-Graph8-Signature'
+            'X-G8-Signature'
         ),
     ],
 
     'endpoints' => [
-        'events' => env('GRAPH8_EVENTS_ENDPOINT'),
-        'companies' => env('GRAPH8_COMPANIES_ENDPOINT'),
-        'contacts' => env('GRAPH8_CONTACTS_ENDPOINT'),
-        'deals' => env('GRAPH8_DEALS_ENDPOINT'),
-        'actions' => env('GRAPH8_ACTIONS_ENDPOINT'),
+        'events' => env(
+            'GRAPH8_EVENTS_ENDPOINT'
+        ),
+
+        'companies' => env(
+            'GRAPH8_COMPANIES_ENDPOINT',
+            '/companies'
+        ),
+
+        'contacts' => env(
+            'GRAPH8_CONTACTS_ENDPOINT',
+            '/contacts'
+        ),
+
+        'deals' => env(
+            'GRAPH8_DEALS_ENDPOINT',
+            '/deals'
+        ),
+
+        'actions' => env(
+            'GRAPH8_ACTIONS_ENDPOINT'
+        ),
     ],
 ];

@@ -7,6 +7,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class Graph8Service
@@ -39,6 +40,27 @@ class Graph8Service
     {
         return $this->get(
             $this->endpoint('deals'),
+            $query
+        );
+    }
+
+    public function fetchPipelines(
+        array $query = []
+    ): array {
+        return $this->get(
+            '/deals/pipelines',
+            $query
+        );
+    }
+
+    public function fetchDealHistory(
+        string $dealId,
+        array $query = []
+    ): array {
+        return $this->get(
+            '/deals/'
+                .rawurlencode($dealId)
+                .'/history',
             $query
         );
     }
@@ -121,26 +143,227 @@ class Graph8Service
         return $contacts;
     }
 
+    public function createDeal(array $payload): array
+    {
+        $this->requirePayloadValues(
+            $payload,
+            [
+                'name',
+                'owner_id',
+                'contact_ids',
+            ],
+            'graph8 deal'
+        );
+
+        if (! is_array($payload['contact_ids'])
+            || $payload['contact_ids'] === []) {
+            throw new RuntimeException(
+                'At least one graph8 contact is required to create a deal.'
+            );
+        }
+
+        return $this->post(
+            $this->endpoint('deals'),
+            $this->withoutNullValues($payload)
+        );
+    }
+
+    public function updateDeal(
+        string $dealId,
+        array $payload
+    ): array {
+        if ($payload === []) {
+            throw new RuntimeException(
+                'At least one deal field is required for an update.'
+            );
+        }
+
+        return $this->patch(
+            $this->resourceUrl(
+                $this->endpoint('deals'),
+                $dealId
+            ),
+            $this->withoutNullValues($payload)
+        );
+    }
+
+    public function createNote(array $payload): array
+    {
+        $this->requirePayloadValues(
+            $payload,
+            ['content'],
+            'graph8 note'
+        );
+
+        return $this->post(
+            '/notes',
+            $this->withoutNullValues($payload)
+        );
+    }
+
+    public function createTask(array $payload): array
+    {
+        $this->requirePayloadValues(
+            $payload,
+            ['title'],
+            'graph8 task'
+        );
+
+        return $this->post(
+            '/tasks',
+            $this->withoutNullValues($payload)
+        );
+    }
+
     public function executeRecommendation(
         Recommendation $recommendation
     ): array {
-        $payload = [
-            'action_type' => $recommendation->action_type,
-            'payload' => $recommendation->action_payload,
-            'source' => 'RevenueTwin8',
-            'metadata' => [
-                'recommendation_id' => $recommendation->id,
-                'simulation_id' => $recommendation->simulation_id,
-                'source_module' => $recommendation->source_module,
-                'approved_by' => $recommendation->approved_by,
-                'approved_at' => $recommendation->approved_at?->toIso8601String(),
-            ],
+        $actionPayload = is_array(
+            $recommendation->action_payload
+        )
+            ? $recommendation->action_payload
+            : [];
+
+        $dealId = $this->firstPayloadValue(
+            $actionPayload,
+            [
+                'graph8_deal_id',
+                'deal_id',
+                'target.deal_id',
+                'metadata.graph8_deal_id',
+            ]
+        );
+
+        $companyId = $this->firstPayloadValue(
+            $actionPayload,
+            [
+                'graph8_company_id',
+                'company_id',
+                'target.company_id',
+                'metadata.graph8_company_id',
+            ]
+        );
+
+        $contactId = $this->firstPayloadValue(
+            $actionPayload,
+            [
+                'graph8_contact_id',
+                'contact_id',
+                'target.contact_id',
+                'metadata.graph8_contact_id',
+            ]
+        );
+
+        [$entityType, $entityId] = $this->targetEntity(
+            $dealId,
+            $companyId,
+            $contactId
+        );
+
+        $actionTitle = trim(
+            (string) (
+                $recommendation->action_type
+                ?: 'RevenueTwin8 recommended action'
+            )
+        );
+
+        $actionDescription = trim(
+            (string) (
+                $recommendation->description
+                ?: Arr::get(
+                    $actionPayload,
+                    'description',
+                    'Execute the approved RevenueTwin8 recommendation.'
+                )
+            )
+        );
+
+        $metadata = [
+            'recommendation_id' => $recommendation->id,
+            'simulation_id' => $recommendation->simulation_id,
+            'source_module' => $recommendation->source_module,
+            'approved_by' => $recommendation->approved_by,
+            'approved_at' => $recommendation
+                ->approved_at
+                ?->toIso8601String(),
         ];
 
-        return $this->post(
-            $this->endpoint('actions'),
-            $payload
+        $results = [];
+
+        $notePayload = [
+            'entity_type' => $entityType,
+            'entity_id' => $entityId,
+            'content' => $this->recommendationNote(
+                $actionTitle,
+                $actionDescription,
+                $actionPayload,
+                $metadata
+            ),
+            'source_url' => config('app.url'),
+        ];
+
+        $results['note'] = $this->createNote(
+            $notePayload
         );
+
+        $taskPayload = [
+            'title' => Str::limit(
+                'RevenueTwin8: '.$actionTitle,
+                255,
+                ''
+            ),
+            'description' => $actionDescription,
+            'task_type' => $this->taskType(
+                $recommendation->action_type
+            ),
+            'entity_type' => $entityType,
+            'entity_id' => $entityId,
+            'due_date' => now()
+                ->addDay()
+                ->toIso8601String(),
+            'priority' => 1,
+            'tags' => [
+                'RevenueTwin8',
+                (string) $recommendation->source_module,
+            ],
+            'source_url' => config('app.url'),
+        ];
+
+        $results['task'] = $this->createTask(
+            $taskPayload
+        );
+
+        $targetStageId = $this->firstPayloadValue(
+            $actionPayload,
+            [
+                'target_stage_id',
+                'graph8_stage_id',
+                'target.stage_id',
+            ]
+        );
+
+        if ($dealId && $targetStageId) {
+            $results['deal'] = $this->updateDeal(
+                (string) $dealId,
+                [
+                    'stage_id' => (string) $targetStageId,
+                ]
+            );
+        }
+
+        return [
+            'provider' => 'graph8',
+            'source' => 'RevenueTwin8',
+            'target' => [
+                'entity_type' => $entityType,
+                'entity_id' => $entityId,
+                'deal_id' => $dealId,
+                'company_id' => $companyId,
+                'contact_id' => $contactId,
+            ],
+            'metadata' => $metadata,
+            'results' => $results,
+        ];
     }
 
     private function get(
@@ -163,6 +386,16 @@ class Graph8Service
         return $this->responseData($response);
     }
 
+    private function patch(
+        string $endpoint,
+        array $payload
+    ): array {
+        $response = $this->client()
+            ->patch($endpoint, $payload);
+
+        return $this->responseData($response);
+    }
+
     private function client(): PendingRequest
     {
         $baseUrl = config('graph8.base_url');
@@ -172,9 +405,15 @@ class Graph8Service
             'Authorization'
         );
         $authScheme = trim(
-            (string) config('graph8.auth_scheme', 'Bearer')
+            (string) config(
+                'graph8.auth_scheme',
+                'Bearer'
+            )
         );
-        $timeout = (int) config('graph8.timeout', 60);
+        $timeout = (int) config(
+            'graph8.timeout',
+            60
+        );
 
         if (blank($baseUrl)) {
             throw new RuntimeException(
@@ -206,7 +445,9 @@ class Graph8Service
 
     private function endpoint(string $name): string
     {
-        $endpoint = config("graph8.endpoints.{$name}");
+        $endpoint = config(
+            "graph8.endpoints.{$name}"
+        );
 
         if (blank($endpoint)) {
             throw new RuntimeException(
@@ -241,9 +482,13 @@ class Graph8Service
         array $candidatePaths
     ): array {
         foreach ($candidatePaths as $path) {
-            $value = Arr::get($response, $path);
+            $value = Arr::get(
+                $response,
+                $path
+            );
 
-            if (is_array($value) && array_is_list($value)) {
+            if (is_array($value)
+                && array_is_list($value)) {
                 return $value;
             }
         }
@@ -265,7 +510,10 @@ class Graph8Service
         ];
 
         foreach ($candidatePaths as $path) {
-            $value = Arr::get($response, $path);
+            $value = Arr::get(
+                $response,
+                $path
+            );
 
             if (is_bool($value)) {
                 return $value;
@@ -279,10 +527,21 @@ class Graph8Service
         Response $response
     ): array {
         if ($response->failed()) {
+            $message = $response->json(
+                'error.message'
+            )
+                ?? $response->json('message')
+                ?? $response->json('detail.0.msg')
+                ?? $response->body();
+
             throw new RuntimeException(
-                $response->json('message')
-                    ?? $response->json('error.message')
-                    ?? "graph8 API request failed with status {$response->status()}."
+                'graph8 API request failed with status '
+                .$response->status()
+                .': '
+                .Str::limit(
+                    (string) $message,
+                    1000
+                )
             );
         }
 
@@ -296,5 +555,126 @@ class Graph8Service
             'status' => $response->status(),
             'body' => $response->body(),
         ];
+    }
+
+    private function requirePayloadValues(
+        array $payload,
+        array $requiredKeys,
+        string $resourceName
+    ): void {
+        foreach ($requiredKeys as $key) {
+            if (! array_key_exists($key, $payload)
+                || blank($payload[$key])) {
+                throw new RuntimeException(
+                    ucfirst($resourceName)
+                    ." requires {$key}."
+                );
+            }
+        }
+    }
+
+    private function withoutNullValues(
+        array $payload
+    ): array {
+        return array_filter(
+            $payload,
+            static fn (mixed $value): bool =>
+                $value !== null
+        );
+    }
+
+    private function firstPayloadValue(
+        array $payload,
+        array $paths
+    ): mixed {
+        foreach ($paths as $path) {
+            $value = Arr::get(
+                $payload,
+                $path
+            );
+
+            if ($value !== null
+                && $value !== '') {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    private function targetEntity(
+        mixed $dealId,
+        mixed $companyId,
+        mixed $contactId
+    ): array {
+        if ($dealId) {
+            return [
+                'deal',
+                (string) $dealId,
+            ];
+        }
+
+        if ($companyId) {
+            return [
+                'company',
+                (string) $companyId,
+            ];
+        }
+
+        if ($contactId) {
+            return [
+                'contact',
+                (string) $contactId,
+            ];
+        }
+
+        return [
+            null,
+            null,
+        ];
+    }
+
+    private function recommendationNote(
+        string $title,
+        string $description,
+        array $payload,
+        array $metadata
+    ): string {
+        return implode("\n\n", [
+            'RevenueTwin8 Approved Recommendation',
+            'Action: '.$title,
+            'Description: '.$description,
+            'Source Module: '
+                .($metadata['source_module'] ?? 'unknown'),
+            'Recommendation ID: '
+                .$metadata['recommendation_id'],
+            'Dynamic Payload: '
+                .json_encode(
+                    $payload,
+                    JSON_PRETTY_PRINT
+                    | JSON_UNESCAPED_SLASHES
+                    | JSON_UNESCAPED_UNICODE
+                ),
+        ]);
+    }
+
+    private function taskType(
+        ?string $actionType
+    ): string {
+        $value = strtolower(
+            (string) $actionType
+        );
+
+        return match (true) {
+            str_contains($value, 'meeting'),
+            str_contains($value, 'workshop'),
+            str_contains($value, 'demo') => 'meeting',
+
+            str_contains($value, 'call'),
+            str_contains($value, 'follow-up'),
+            str_contains($value, 'follow up') => 'call',
+
+            default => 'task',
+        };
     }
 }

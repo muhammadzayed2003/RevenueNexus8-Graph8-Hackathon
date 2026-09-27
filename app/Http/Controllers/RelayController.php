@@ -14,7 +14,10 @@ class RelayController extends Controller
     public function index(Request $request): View
     {
         $recommendations = Recommendation::query()
-            ->where('user_id', $request->user()->id)
+            ->where(
+                'user_id',
+                $request->user()->id
+            )
             ->with('simulation')
             ->latest()
             ->get();
@@ -32,11 +35,16 @@ class RelayController extends Controller
             ->count();
 
         return view('modules.relay.index', [
-            'recommendations' => $recommendations,
-            'pendingCount' => $pendingCount,
-            'approvedCount' => $approvedCount,
-            'executedCount' => $executedCount,
-            'graph8Configured' => $this->graph8Configured(),
+            'recommendations' =>
+                $recommendations,
+            'pendingCount' =>
+                $pendingCount,
+            'approvedCount' =>
+                $approvedCount,
+            'executedCount' =>
+                $executedCount,
+            'graph8Configured' =>
+                $this->graph8Configured(),
         ]);
     }
 
@@ -50,14 +58,16 @@ class RelayController extends Controller
         );
 
         abort_unless(
-            $recommendation->status === 'pending',
+            $recommendation->status ===
+                'pending',
             422,
             'Only pending recommendations can be approved.'
         );
 
         $recommendation->update([
             'status' => 'approved',
-            'approved_by' => $request->user()->id,
+            'approved_by' =>
+                $request->user()->id,
             'approved_at' => now(),
             'error_message' => null,
         ]);
@@ -82,7 +92,10 @@ class RelayController extends Controller
         abort_unless(
             in_array(
                 $recommendation->status,
-                ['pending', 'approved'],
+                [
+                    'pending',
+                    'approved',
+                ],
                 true
             ),
             422,
@@ -96,7 +109,10 @@ class RelayController extends Controller
 
         return redirect()
             ->route('relay.index')
-            ->with('success', 'Recommendation rejected.');
+            ->with(
+                'success',
+                'Recommendation rejected.'
+            );
     }
 
     public function execute(
@@ -110,19 +126,23 @@ class RelayController extends Controller
         );
 
         abort_unless(
-            $recommendation->status === 'approved',
+            $recommendation->status ===
+                'approved',
             422,
             'Only approved recommendations can be executed.'
         );
 
         try {
             $response = $graph8Service
-                ->executeRecommendation($recommendation);
+                ->executeRecommendation(
+                    $recommendation
+                );
 
             $recommendation->update([
                 'status' => 'executed',
                 'executed_at' => now(),
-                'execution_response' => $response,
+                'execution_response' =>
+                    $response,
                 'error_message' => null,
             ]);
 
@@ -130,19 +150,21 @@ class RelayController extends Controller
                 ->route('relay.index')
                 ->with(
                     'success',
-                    'Action executed successfully through graph8.'
+                    'Approved action created an actual graph8 note and follow-up task.'
                 );
         } catch (Throwable $exception) {
             report($exception);
 
             $recommendation->update([
-                'error_message' => $exception->getMessage(),
+                'error_message' =>
+                    $exception->getMessage(),
             ]);
 
             return redirect()
                 ->route('relay.index')
                 ->withErrors([
-                    'graph8' => $exception->getMessage(),
+                    'graph8' =>
+                        $exception->getMessage(),
                 ]);
         }
     }
@@ -152,15 +174,19 @@ class RelayController extends Controller
         Recommendation $recommendation
     ): void {
         abort_unless(
-            $recommendation->user_id === $request->user()->id,
+            $recommendation->user_id ===
+                $request->user()->id,
             403
         );
     }
 
     private function graph8Configured(): bool
     {
-        return filled(config('graph8.base_url'))
-            && filled(config('graph8.api_token'))
-            && filled(config('graph8.endpoints.actions'));
+        return filled(
+            config('graph8.base_url')
+        )
+            && filled(
+                config('graph8.api_token')
+            );
     }
 }

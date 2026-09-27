@@ -13,21 +13,33 @@ class Graph8WebhookController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
-        $payload = $request->all();
+        if (! $this->hasValidSignature($request)) {
+            return response()->json([
+                'received' => false,
+                'message' => 'Invalid graph8 webhook signature.',
+            ], 401);
+        }
+
+        $payload = $request->json()->all();
 
         $eventType = $this->firstValue($payload, [
+            'event',
             'event_type',
             'eventType',
             'type',
             'event.type',
+            'data.eda_event',
+            'data.g8_correlation.event',
             'name',
         ]) ?? 'unknown';
 
         $externalId = $this->firstValue($payload, [
+            'id',
             'event_id',
             'eventId',
-            'id',
             'event.id',
+            'data.idempotency_key',
+            'data.g8_correlation.idempotency_key',
         ]);
 
         $companyId = $this->firstValue($payload, [
@@ -58,12 +70,13 @@ class Graph8WebhookController extends Controller
         ]);
 
         $occurredAtValue = $this->firstValue($payload, [
+            'timestamp',
             'occurred_at',
             'occurredAt',
             'created_at',
             'createdAt',
-            'timestamp',
             'event.created_at',
+            'data.changed_at',
         ]);
 
         $occurredAt = now();
@@ -112,6 +125,103 @@ class Graph8WebhookController extends Controller
             'event_id' => $event->id,
             'event_type' => $event->event_type,
         ], 202);
+    }
+
+    private function hasValidSignature(Request $request): bool
+    {
+        $secret = (string) config(
+            'services.graph8.webhook_secret',
+            ''
+        );
+
+        if ($secret === '') {
+            return false;
+        }
+
+        $configuredHeader = (string) config(
+            'services.graph8.webhook_signature_header',
+            'X-G8-Signature'
+        );
+
+        $providedSignature = $request->header($configuredHeader)
+            ?? $request->header('X-G8-Signature')
+            ?? $request->header('X-Graph8-Signature');
+
+        if (! is_string($providedSignature)
+            || trim($providedSignature) === '') {
+            return false;
+        }
+
+        $rawBody = $request->getContent();
+
+        $expectedHex = hash_hmac(
+            'sha256',
+            $rawBody,
+            $secret
+        );
+
+        $expectedBase64 = base64_encode(
+            hash_hmac(
+                'sha256',
+                $rawBody,
+                $secret,
+                true
+            )
+        );
+
+        foreach ($this->signatureCandidates(
+            $providedSignature
+        ) as $candidate) {
+            if (hash_equals(
+                $expectedHex,
+                strtolower($candidate)
+            )) {
+                return true;
+            }
+
+            if (hash_equals(
+                $expectedBase64,
+                $candidate
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function signatureCandidates(
+        string $signature
+    ): array {
+        $candidates = [];
+
+        foreach (explode(',', trim($signature)) as $part) {
+            $part = trim($part);
+
+            if ($part === '') {
+                continue;
+            }
+
+            $candidates[] = $part;
+
+            if (str_contains($part, '=')) {
+                [$prefix, $value] = explode(
+                    '=',
+                    $part,
+                    2
+                );
+
+                if (in_array(
+                    strtolower(trim($prefix)),
+                    ['sha256', 'v1'],
+                    true
+                )) {
+                    $candidates[] = trim($value);
+                }
+            }
+        }
+
+        return array_values(array_unique($candidates));
     }
 
     private function firstValue(
