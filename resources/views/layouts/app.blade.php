@@ -13,7 +13,19 @@
         content="{{ csrf_token() }}"
     >
 
-    <title>{{ config('app.name', 'RevenueNexus8') }}</title>
+    <title>RevenueNexus8</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ asset('images/chatbot.png') }}"
+    >
+
+    <link
+        rel="shortcut icon"
+        type="image/png"
+        href="{{ asset('images/chatbot.png') }}"
+    >
 
     @vite([
         'resources/css/app.css',
