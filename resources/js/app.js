@@ -1,6 +1,6 @@
-import './twin-voice';
+﻿import './agent-voice';
 import Alpine from 'alpinejs';
-import { createTwinScene } from './twin-scene';
+import { createNexusScene } from './nexus-scene';
 
 window.Alpine = Alpine;
 
@@ -61,7 +61,7 @@ Alpine.data('revenueRobot', (settings = {}) => {
         init() {
             this.$nextTick(() => {
                 try {
-                    scene = createTwinScene(
+                    scene = createNexusScene(
                         this.$refs.viewport,
                         {
                             label: settings.name,

@@ -1,10 +1,10 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ route('dashboard') }}"
                    class="text-sm font-medium text-slate-500 hover:text-violet-600">
-                    ← RevenueTwin8
+                    â† RevenueNexus8
                 </a>
 
                 <h2 class="mt-1 text-xl font-semibold text-slate-900">
@@ -323,7 +323,7 @@
 
                 <section class="rounded-3xl border border-white/10 bg-slate-900 p-7">
                     @if ($selectedSimulation && $selectedSimulation->status === 'completed')
-                        <x-twin-conversation :simulation="$selectedSimulation" />
+                        <x-agent-conversation :simulation="$selectedSimulation" />
                         <div class="flex flex-wrap items-start justify-between gap-5">
                             <div class="max-w-2xl">
                                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-violet-400">
@@ -439,7 +439,7 @@
                                 <ul class="mt-4 space-y-3">
                                     @forelse ($objections as $objection)
                                         <li class="flex gap-3 text-sm leading-6 text-slate-400">
-                                            <span class="text-rose-400">•</span>
+                                            <span class="text-rose-400">â€¢</span>
                                             <span>{{ $objection }}</span>
                                         </li>
                                     @empty
@@ -467,7 +467,7 @@
                                     href="{{ route('relay.index') }}"
                                     class="mt-5 inline-flex rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
                                 >
-                                    Review in Relay8 →
+                                    Review in Relay8 â†’
                                 </a>
                             </div>
                         </div>
@@ -491,7 +491,7 @@
                         <div class="flex min-h-[650px] items-center justify-center text-center">
                             <div class="max-w-lg">
                                 <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10 text-3xl text-violet-400">
-                                    ◈
+                                    â—ˆ
                                 </div>
 
                                 <h2 class="mt-5 text-xl font-semibold text-white">

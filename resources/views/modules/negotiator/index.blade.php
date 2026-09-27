@@ -1,10 +1,10 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ route('dashboard') }}"
                    class="text-sm font-medium text-slate-500 hover:text-amber-600">
-                    ← RevenueTwin8
+                    â† RevenueNexus8
                 </a>
 
                 <h2 class="mt-1 text-xl font-semibold text-slate-900">
@@ -136,7 +136,7 @@
 
                             <div>
                                 <label for="buyer_message" class="mb-2 block text-sm font-medium text-slate-300">
-                                    Buyer’s latest message or objection
+                                    Buyerâ€™s latest message or objection
                                 </label>
 
                                 <textarea
@@ -280,7 +280,7 @@
 
                 <section class="rounded-3xl border border-white/10 bg-slate-900 p-7">
                     @if ($selectedSimulation && $selectedSimulation->status === 'completed')
-                        <x-twin-conversation :simulation="$selectedSimulation" />
+                        <x-agent-conversation :simulation="$selectedSimulation" />
                         <div class="flex flex-wrap items-start justify-between gap-5">
                             <div class="max-w-2xl">
                                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-amber-400">
@@ -421,7 +421,7 @@
                                 <ul class="mt-4 space-y-3">
                                     @forelse ($risks as $risk)
                                         <li class="flex gap-3 text-sm leading-6 text-slate-400">
-                                            <span class="text-rose-400">•</span>
+                                            <span class="text-rose-400">â€¢</span>
                                             <span>{{ $risk }}</span>
                                         </li>
                                     @empty
@@ -440,7 +440,7 @@
                                 <ul class="mt-4 space-y-3">
                                     @forelse ($concessions as $concession)
                                         <li class="flex gap-3 text-sm leading-6 text-slate-400">
-                                            <span class="text-cyan-400">•</span>
+                                            <span class="text-cyan-400">â€¢</span>
                                             <span>{{ $concession }}</span>
                                         </li>
                                     @empty
@@ -469,7 +469,7 @@
                                 href="{{ route('relay.index') }}"
                                 class="mt-5 inline-flex rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
                             >
-                                Review in Relay8 →
+                                Review in Relay8 â†’
                             </a>
                         </div>
                     @elseif ($selectedSimulation && $selectedSimulation->status === 'failed')
@@ -492,7 +492,7 @@
                         <div class="flex min-h-[650px] items-center justify-center text-center">
                             <div class="max-w-lg">
                                 <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 text-3xl text-amber-400">
-                                    ⇄
+                                    â‡„
                                 </div>
 
                                 <h2 class="mt-5 text-xl font-semibold text-white">

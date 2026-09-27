@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Services;
 
@@ -263,7 +263,7 @@ class Graph8Service
         $actionTitle = trim(
             (string) (
                 $recommendation->action_type
-                ?: 'RevenueTwin8 recommended action'
+                ?: 'RevenueNexus8 recommended action'
             )
         );
 
@@ -273,7 +273,7 @@ class Graph8Service
                 ?: Arr::get(
                     $actionPayload,
                     'description',
-                    'Execute the approved RevenueTwin8 recommendation.'
+                    'Execute the approved RevenueNexus8 recommendation.'
                 )
             )
         );
@@ -308,7 +308,7 @@ class Graph8Service
 
         $taskPayload = [
             'title' => Str::limit(
-                'RevenueTwin8: '.$actionTitle,
+                'RevenueNexus8: '.$actionTitle,
                 255,
                 ''
             ),
@@ -323,7 +323,7 @@ class Graph8Service
                 ->toIso8601String(),
             'priority' => 1,
             'tags' => [
-                'RevenueTwin8',
+                'RevenueNexus8',
                 (string) $recommendation->source_module,
             ],
             'source_url' => config('app.url'),
@@ -353,7 +353,7 @@ class Graph8Service
 
         return [
             'provider' => 'graph8',
-            'source' => 'RevenueTwin8',
+            'source' => 'RevenueNexus8',
             'target' => [
                 'entity_type' => $entityType,
                 'entity_id' => $entityId,
@@ -641,7 +641,7 @@ class Graph8Service
         array $metadata
     ): string {
         return implode("\n\n", [
-            'RevenueTwin8 Approved Recommendation',
+            'RevenueNexus8 Approved Recommendation',
             'Action: '.$title,
             'Description: '.$description,
             'Source Module: '

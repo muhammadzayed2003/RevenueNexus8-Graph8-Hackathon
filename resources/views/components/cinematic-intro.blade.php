@@ -1,17 +1,17 @@
-<div x-data="revenueIntro">
+﻿<div x-data="revenueIntro">
     <template x-if="visible">
         <section
             class="rt-intro"
             x-bind:class="{
                 'rt-intro--leaving': fading
             }"
-            aria-label="RevenueTwin8 introduction"
+            aria-label="RevenueNexus8 introduction"
         >
             <div class="rt-intro-light"></div>
 
             <div class="rt-intro-robot">
-                <x-twin-robot
-                    name="Revenue Twin"
+                <x-nexus-robot
+                    name="Revenue Nexus"
                     size="hero"
                     :show-identity="false"
                     :entrance="true"
@@ -29,7 +29,7 @@
                 </span>
 
                 <h1>
-                    RevenueTwin<span>8</span>
+                    RevenueNexus<span>8</span>
                 </h1>
             </div>
 
@@ -38,10 +38,11 @@
                 class="rt-intro-skip"
                 x-on:click="finish()"
             >
-                Skip intro ↗
+                Skip intro â†—
             </button>
 
             <div class="rt-intro-progress"></div>
         </section>
     </template>
 </div>
+

@@ -1,4 +1,4 @@
-@props(['simulation'])
+﻿@props(['simulation'])
 
 @php
     $result = $simulation->result_data ?? [];
@@ -16,7 +16,7 @@
 
         $name = is_string($name) && trim($name) !== ''
             ? trim($name)
-            : 'AI Twin';
+            : 'AI Agent';
 
         if (! isset($speakers[$name])) {
             $speakers[$name] = [
@@ -71,13 +71,13 @@
             }
 
             $addTurn(
-                $round['buyer_name'] ?? $buyer.' — Buyer',
+                $round['buyer_name'] ?? $buyer.' â€” Buyer',
                 $round['buyer_move'] ?? '',
                 'Simulated buyer'
             );
 
             $addTurn(
-                $round['seller_name'] ?? 'Seller Twin',
+                $round['seller_name'] ?? 'Seller Agent',
                 $round['seller_response'] ?? '',
                 'Simulated seller'
             );
@@ -87,6 +87,11 @@
     $configuration = [
         'turns' => $turns,
         'speakers' => array_values($speakers),
+        'autoRun' => $simulation->status === 'completed'
+            && str_contains(
+                strtolower((string) session('success', '')),
+                'completed'
+            ),
     ];
 @endphp
 
@@ -100,7 +105,7 @@
         <div class="rt-conversation-heading">
             <div>
                 <p class="rt-eyebrow">
-                    AI twin conversation
+                    AI Strategy Conversation
                 </p>
 
                 <h3>
@@ -127,7 +132,7 @@
                             current.speaker_id === @js($speaker['id'])
                     }"
                 >
-                    <x-twin-robot
+                    <x-nexus-robot
                         :name="$speaker['name']"
                         :role="$speaker['role']"
                         :speaker-id="$speaker['id']"
@@ -150,7 +155,43 @@
             <p x-text="current.text"></p>
         </div>
 
-        <div class="rt-conversation-controls">
+        <div
+            class="rt-new-run-controls"
+            x-cloak
+            x-show="autoRun"
+            style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"
+        >
+            <button
+                type="button"
+                class="rt-button"
+                x-on:click="toggleMute()"
+                x-bind:disabled="!supported || finished"
+                x-bind:aria-pressed="muted"
+                x-text="muted ? 'Unmute' : 'Mute'"
+            ></button>
+
+            <button
+                type="button"
+                class="rt-button rt-button-light"
+                x-show="needsStart"
+                x-on:click="play()"
+            >
+                Start audio
+            </button>
+
+            <span
+                class="rt-muted"
+                x-text="finished
+                    ? 'Conversation complete'
+                    : (muted ? 'Sound off' : 'Sound on')"
+            ></span>
+        </div>
+
+        <div
+            class="rt-conversation-controls"
+            x-cloak
+            x-show="!autoRun"
+        >
             <button
                 type="button"
                 class="rt-button rt-button-light"
@@ -189,7 +230,7 @@
                 x-on:click="selectTurn(index + 1)"
                 x-bind:disabled="index >= turns.length - 1"
             >
-                Next turn →
+                Next turn â†’
             </button>
 
             <label class="rt-conversation-speed">
@@ -200,9 +241,9 @@
                     x-bind:disabled="playing"
                     aria-label="Playback speed"
                 >
-                    <option value="0.85">0.85×</option>
-                    <option value="1">1×</option>
-                    <option value="1.15">1.15×</option>
+                    <option value="0.85">0.85Ã—</option>
+                    <option value="1">1Ã—</option>
+                    <option value="1.15">1.15Ã—</option>
                 </select>
             </label>
         </div>
@@ -261,7 +302,7 @@
         </details>
 
         <p class="rt-conversation-note">
-            Generated simulation dialogue · Device voice playback
+            Generated simulation dialogue Â· Device voice playback
         </p>
     </section>
 
@@ -318,28 +359,28 @@
                 background-color: rgba(238, 233, 223, 0.035);
             }
 
-            .rt-conversation-agent .rt3d-twin--small {
+            .rt-conversation-agent .rt3d-nexus--small {
                 height: 265px;
             }
 
-            .rt-conversation-agent .rt3d-twin__identity {
+            .rt-conversation-agent .rt3d-nexus__identity {
                 width: calc(100% - 12px);
                 max-width: none;
                 padding: 9px;
                 gap: 7px;
             }
 
-            .rt-conversation-agent .rt3d-twin__identity > div {
+            .rt-conversation-agent .rt3d-nexus__identity > div {
                 min-width: 0;
                 flex: 1;
             }
 
-            .rt-conversation-agent .rt3d-twin__identity strong {
+            .rt-conversation-agent .rt3d-nexus__identity strong {
                 overflow-wrap: anywhere;
                 font-size: 10px;
             }
 
-            .rt-conversation-agent .rt3d-twin__identity small {
+            .rt-conversation-agent .rt3d-nexus__identity small {
                 font-size: 8px;
             }
 
@@ -437,7 +478,7 @@
                     padding: 14px;
                 }
 
-                .rt-conversation-agent .rt3d-twin--small {
+                .rt-conversation-agent .rt3d-nexus--small {
                     height: 220px;
                 }
 
@@ -445,7 +486,7 @@
                     font-size: 20px;
                 }
 
-                .rt-conversation-agent .rt3d-twin__identity > span {
+                .rt-conversation-agent .rt3d-nexus__identity > span {
                     display: none;
                 }
             }

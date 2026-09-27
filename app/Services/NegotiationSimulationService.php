@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Services;
 
@@ -14,7 +14,7 @@ class NegotiationSimulationService
         $prompt = <<<'PROMPT'
 You are Negotiator8, a grounded B2B negotiation simulation engine.
 
-Simulate the requested number of rounds between a buyer twin and a seller twin.
+Simulate the requested number of rounds between a buyer agent and a seller agent.
 
 SOURCE RULES:
 - Use only the supplied product details, commercial terms, buyer message,
@@ -50,7 +50,7 @@ COMMERCIAL RULES:
 OUTPUT RULES:
 - Return exactly the requested number of rounds.
 - buyer_name must be the supplied buyer label.
-- seller_name must be "Seller Twin".
+- seller_name must be "Seller Agent".
 - Keep spoken dialogue concise and natural.
 - Include important missing information and evidence limitations in key_risks.
 - All probability, pressure, confidence and score fields use a 0 to 100
@@ -74,7 +74,7 @@ OUTPUT RULES:
     {
       "round": 1,
       "buyer_name": "string",
-      "seller_name": "Seller Twin",
+      "seller_name": "Seller Agent",
       "buyer_move": "string",
       "seller_response": "string",
       "buyer_pressure": 0,
@@ -321,7 +321,7 @@ PROMPT;
 
         /*
          * Names, numbering and percentages are controlled by
-         * RevenueTwin8 rather than trusted from generated output.
+         * RevenueNexus8 rather than trusted from generated output.
          */
         foreach (
             $result['rounds']
@@ -333,7 +333,7 @@ PROMPT;
                 $scenario['buyer'];
 
             $round['seller_name'] =
-                'Seller Twin';
+                'Seller Agent';
 
             $round['buyer_pressure'] =
                 $normalisePercentage(
@@ -364,7 +364,7 @@ PROMPT;
             );
 
         /*
-         * RevenueTwin8 controls the Relay8 recommendation
+         * RevenueNexus8 controls the Relay8 recommendation
          * wording, action type and payload.
          */
         $result['recommendation']['title'] =

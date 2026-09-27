@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <section class="rt-hero">
         <div class="rt-hero-copy">
             <div class="rt-pill">
@@ -35,9 +35,9 @@
         <div class="rt-hero-art">
             <div class="rt-orbit"></div>
 
-            <x-twin-robot
-                name="Revenue Twin"
-                role="Your decision counterpart"
+            <x-nexus-robot
+                name="Revenue Nexus"
+                role="Your decision intelligence"
                 size="hero"
                 :show-identity="false"
             />
@@ -108,7 +108,7 @@
                             {{ $studio['number'] }}
                         </span>
 
-                        <span>↗</span>
+                        <span>â†—</span>
                     </div>
 
                     <h3>
@@ -130,7 +130,7 @@
                         </span>
 
                         <span>
-                            Open studio →
+                            Open studio â†’
                         </span>
                     </div>
                 </a>
@@ -142,7 +142,7 @@
             href="{{ route('relay.index') }}"
         >
             <div class="rt-relay-mark">
-                ↗
+                â†—
             </div>
 
             <div>
@@ -167,7 +167,7 @@
                 </small>
             </div>
 
-            <span>→</span>
+            <span>â†’</span>
         </a>
     </section>
 
@@ -252,7 +252,7 @@
 
                     <small>
                         {{ str_replace('_', ' ', $simulation->module) }}
-                        ·
+                        Â·
                         {{ $simulation->created_at->diffForHumans() }}
                     </small>
                 </div>
@@ -261,7 +261,7 @@
                     {{ ucfirst($simulation->status) }}
                 </span>
 
-                <span>↗</span>
+                <span>â†—</span>
             </a>
         @empty
             <div class="rt-empty">

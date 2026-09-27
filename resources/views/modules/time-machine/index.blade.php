@@ -1,10 +1,10 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ route('dashboard') }}"
                    class="text-sm font-medium text-slate-500 hover:text-cyan-600">
-                    ← RevenueTwin8
+                    â† RevenueNexus8
                 </a>
 
                 <h2 class="mt-1 text-xl font-semibold text-slate-900">
@@ -398,7 +398,7 @@
                                 <ul class="mt-4 space-y-3">
                                     @forelse ($findings as $finding)
                                         <li class="flex gap-3 text-sm leading-6 text-slate-400">
-                                            <span class="text-emerald-400">•</span>
+                                            <span class="text-emerald-400">â€¢</span>
                                             <span>{{ $finding }}</span>
                                         </li>
                                     @empty
@@ -417,7 +417,7 @@
                                 <ul class="mt-4 space-y-3">
                                     @forelse ($limitations as $limitation)
                                         <li class="flex gap-3 text-sm leading-6 text-slate-400">
-                                            <span class="text-amber-400">•</span>
+                                            <span class="text-amber-400">â€¢</span>
                                             <span>{{ $limitation }}</span>
                                         </li>
                                     @empty
@@ -446,7 +446,7 @@
                                 href="{{ route('relay.index') }}"
                                 class="mt-5 inline-flex rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
                             >
-                                Review in Relay8 →
+                                Review in Relay8 â†’
                             </a>
                         </div>
                     @elseif ($selectedSimulation && $selectedSimulation->status === 'failed')
@@ -469,7 +469,7 @@
                         <div class="flex min-h-[650px] items-center justify-center text-center">
                             <div class="max-w-lg">
                                 <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-500/10 text-3xl text-cyan-400">
-                                    ◷
+                                    â—·
                                 </div>
 
                                 <h2 class="mt-5 text-xl font-semibold text-white">

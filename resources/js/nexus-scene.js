@@ -1,6 +1,6 @@
-import * as THREE from 'three';
+﻿import * as THREE from 'three';
 
-export function createTwinScene(container, options = {}) {
+export function createNexusScene(container, options = {}) {
     if (!(container instanceof HTMLElement)) {
         throw new Error('Robot viewport is missing.');
     }
@@ -46,7 +46,7 @@ export function createTwinScene(container, options = {}) {
 
     canvas.setAttribute(
         'aria-label',
-        options.label || 'Cream-suited RevenueTwin robot'
+        options.label || 'Cream-suited RevenueNexus robot'
     );
 
     container.appendChild(canvas);
@@ -780,3 +780,4 @@ export function createTwinScene(container, options = {}) {
         },
     };
 }
+

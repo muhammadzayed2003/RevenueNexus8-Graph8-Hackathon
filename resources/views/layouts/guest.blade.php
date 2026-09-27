@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -13,7 +13,7 @@
         content="{{ csrf_token() }}"
     >
 
-    <title>{{ config('app.name', 'RevenueTwin8') }}</title>
+    <title>{{ config('app.name', 'RevenueNexus8') }}</title>
 
     @vite([
         'resources/css/app.css',
@@ -30,7 +30,7 @@
                 class="rt-wordmark"
                 href="{{ route('login') }}"
             >
-                RevenueTwin<span>8</span><i></i>
+                RevenueNexus<span>8</span><i></i>
             </a>
 
             <span class="rt-eyebrow">
@@ -50,8 +50,8 @@
                 <em>other perspective.</em>
             </h1>
 
-            <x-twin-robot
-                name="Revenue Twin"
+            <x-nexus-robot
+                name="Revenue Nexus"
                 size="large"
                 :show-identity="false"
             />
@@ -86,7 +86,7 @@
                     New here?
 
                     <a href="{{ route('register') }}">
-                        Create an account ↗
+                        Create an account â†—
                     </a>
                 </p>
             @endif
@@ -96,7 +96,7 @@
                     Already have an account?
 
                     <a href="{{ route('login') }}">
-                        Sign in ↗
+                        Sign in â†—
                     </a>
                 </p>
             @endif
@@ -104,3 +104,4 @@
     </main>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers;
 
@@ -203,7 +203,7 @@ class BoardroomController extends Controller
                     ?? (
                         ($company->name
                             ?? 'graph8 Company')
-                        .' RevenueTwin8 Deal'
+                        .' RevenueNexus8 Deal'
                     ),
                 'data' => $graph8Deal['data']
                     ?? $graph8Deal,
@@ -362,7 +362,7 @@ class BoardroomController extends Controller
                         )
                     ) ===
                     Str::lower(
-                        'RevenueTwin8 Sales Pipeline'
+                        'RevenueNexus8 Sales Pipeline'
                     )
             )
             ?? collect($pipelines)
@@ -415,7 +415,7 @@ class BoardroomController extends Controller
         $dealName = trim(
             ($company->name
                 ?? 'graph8 Company')
-            .' — '
+            .' â€” '
             .Str::limit(
                 $validated['solution'],
                 80,
@@ -571,7 +571,7 @@ class BoardroomController extends Controller
         array $validated
     ): string {
         return implode("\n\n", [
-            'Created automatically by RevenueTwin8.',
+            'Created automatically by RevenueNexus8.',
             'Proposed solution: '
                 .$validated['solution'],
             'Known objections: '

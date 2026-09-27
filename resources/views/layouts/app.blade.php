@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -13,7 +13,7 @@
         content="{{ csrf_token() }}"
     >
 
-    <title>{{ config('app.name', 'RevenueTwin8') }}</title>
+    <title>{{ config('app.name', 'RevenueNexus8') }}</title>
 
     @vite([
         'resources/css/app.css',
@@ -30,7 +30,7 @@
                 class="rt-wordmark"
                 href="{{ route('dashboard') }}"
             >
-                RevenueTwin<span>8</span><i></i>
+                RevenueNexus<span>8</span><i></i>
             </a>
 
             <div
@@ -96,16 +96,17 @@
         </main>
 
         <footer class="rt-footer">
-            <span>RevenueTwin8</span>
+            <span>RevenueNexus8</span>
 
             <span>
                 Think ahead. Act with confidence.
             </span>
 
             <a href="{{ route('relay.index') }}">
-                Open Relay8 ↗
+                Open Relay8 â†—
             </a>
         </footer>
     </div>
 </body>
 </html>
+

@@ -1,6 +1,6 @@
-@props([
-    'name' => 'Revenue Twin',
-    'role' => 'AI simulation twin',
+﻿@props([
+    'name' => 'Revenue Nexus',
+    'role' => 'AI simulation agent',
     'accent' => '#eee9df',
     'size' => 'medium',
     'state' => 'idle',
@@ -27,26 +27,26 @@
 
 <div
     {{ $attributes->class([
-        'rt3d-twin',
-        'rt3d-twin--'.$safeSize,
+        'rt3d-nexus',
+        'rt3d-nexus--'.$safeSize,
     ]) }}
     x-data="revenueRobot({{
         Illuminate\Support\Js::from($settings)
     }})"
     x-on:rt-speaker.window="changeSpeaker($event.detail)"
     x-bind:class="{
-        'rt3d-twin--speaking': active
+        'rt3d-nexus--speaking': active
     }"
 >
     <div
         x-ref="viewport"
-        class="rt3d-twin__viewport"
+        class="rt3d-nexus__viewport"
     ></div>
 
     <div
         x-cloak
         x-show="failed"
-        class="rt3d-twin__error"
+        class="rt3d-nexus__error"
         role="status"
     >
         3D preview unavailable on this device.
@@ -54,7 +54,7 @@
     </div>
 
     @if($showIdentity)
-        <div class="rt3d-twin__identity">
+        <div class="rt3d-nexus__identity">
             <i></i>
 
             <div>
@@ -76,3 +76,4 @@
         </div>
     @endif
 </div>
+
