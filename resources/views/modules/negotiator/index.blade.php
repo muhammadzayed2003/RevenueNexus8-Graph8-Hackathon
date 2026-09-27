@@ -65,6 +65,8 @@
                             x-on:submit="submitting = true"
                         >
                             @csrf
+                            <x-negotiation-context :deals="$deals" />
+
 
                             <div>
                                 <label for="buyer" class="mb-2 block text-sm font-medium text-slate-300">
